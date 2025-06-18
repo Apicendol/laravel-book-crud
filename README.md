@@ -19,8 +19,6 @@ This is my first Laravel project – a simple book management app built with Lar
 ## 📷 Screenshots
 
 ![Home](screenshots/book-index.png)
-![Add Book](screenshots/book-create.png)
-![Recycle Bin](screenshots/book-trash.png)
 
 ---
 
@@ -59,10 +57,10 @@ During this project, I learned and practiced:
 - Understanding the MVC (Model-View-Controller) architecture in Laravel
 - How to build full CRUD features using Laravel routes, controllers, and Blade
 - Working with form validation, soft deletes, and flash messages
-- Structuring UI with Bootstrap for better user experience
+- Structuring UI with Bootstrap for a better user experience
 - Using Laravel's migration, Eloquent ORM, and artisan CLI
 - Implementing unit testing for form submission and validation (PHPUnit)
-- Managing Laravel project with Git & pushing to GitHub
+- Managing a Laravel project with Git & pushing to GitHub
 
 This project marked my transition from static HTML/CSS to dynamic full-stack development using Laravel 🎉
 
