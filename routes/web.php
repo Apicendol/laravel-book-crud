@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/books', [BookController::class, 'index']);
-Route::get('/books/create', [BookController::class, 'create']);
-Route::post('/books', [BookController::class, 'store']);
-Route::get('/books/{id}/edit', [BookController::class, 'edit']);
-Route::put('/books/{id}', [BookController::class, 'update']);
-Route::delete('/books/{id}', [BookController::class, 'destroy']);
-Route::get('/books/trash', [BookController::class, 'trash']);
-Route::put('/books/{id}/restore', [BookController::class, 'restore']);
+// Resource route, otomatis mencakup: index, create, store, show, edit, update, destroy
+Route::resource('books', BookController::class)->except(['show']);
+
+// Tambahan fitur custom
+Route::get('/books/trash', [BookController::class, 'trash'])->name('books.trash');
+Route::put('/books/{id}/restore', [BookController::class, 'restore'])->name('books.restore');
+Route::delete('/books/{id}/force-delete', [BookController::class, 'forceDelete'])->name('books.force-delete');

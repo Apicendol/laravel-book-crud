@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreBookRequest;
 
 class BookController extends Controller
 {
@@ -18,46 +19,36 @@ class BookController extends Controller
         return view('books.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|min:3',
-            'author' => 'required|min:3',
-        ]);
+        Book::create($request->validated());
 
-        Book::create($validated);
-
-        return redirect('/books')->with('success', 'Buku berhasil ditambahkan!');
+        return redirect()->route('books.index')->with('success', 'Buku berhasil ditambahkan!');
     }
 
-    public function edit($id)
+    public function edit(Book $book)
     {
-        $book = Book::findOrFail($id);
         return view('books.edit', compact('book'));
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreBookRequest $request, Book $book)
     {
-        $validated = $request->validate([
-            'title' => 'required|min:3',
-            'author' => 'required|min:3',
-        ]);
+        $book->update($request->validated());
 
-        $book = Book::findOrFail($id);
-        $book->update($validated);
-
-        return redirect('/books')->with('success', 'Buku berhasil diperbarui!');
+        return redirect()->route('books.index')->with('success', 'Buku berhasil diperbarui!');
     }
-    public function destroy($id)
+
+    public function destroy(Book $book)
     {
-        $book = Book::findOrFail($id);
         $book->delete();
 
-        return redirect('/books')->with('success', 'Buku berhasil dihapus!');
+        return redirect()->route('books.index')->with('success', 'Buku berhasil dihapus (soft delete).');
     }
+
     public function trash()
     {
-        $books = Book::onlyTrashed()->get();
+        $books = Book::onlyTrashed()->latest()->paginate(10);
+
         return view('books.trash', compact('books'));
     }
 
@@ -66,6 +57,14 @@ class BookController extends Controller
         $book = Book::onlyTrashed()->findOrFail($id);
         $book->restore();
 
-        return redirect('/books')->with('success', 'Buku berhasil dikembalikan!');
+        return redirect()->route('books.trash')->with('success', 'Buku berhasil dipulihkan!');
+    }
+
+    public function forceDelete($id)
+    {
+        $book = Book::onlyTrashed()->findOrFail($id);
+        $book->forceDelete();
+
+        return redirect()->route('books.trash')->with('success', 'Buku berhasil dihapus secara permanen.');
     }
 }
